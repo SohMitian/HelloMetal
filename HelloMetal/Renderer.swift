@@ -10,6 +10,12 @@ import MetalKit
 
 class Renderer: NSObject, MTKViewDelegate {
     
+    let parent: MetalView
+    
+    init(_ parent: MetalView){
+        self.parent = parent
+    }
+    
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         
     }
