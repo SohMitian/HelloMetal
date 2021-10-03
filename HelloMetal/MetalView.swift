@@ -14,7 +14,12 @@ struct MetalView: UIViewRepresentable{
     
     func makeUIView(context: Context) -> MTKView {
         let view = MTKView()
+        view.device = MTLCreateSystemDefaultDevice()
         view.delegate = context.coordinator
+        
+        if let device = view.device {
+            context.coordinator.setup(device: device)
+        }
         return view
     }
     
