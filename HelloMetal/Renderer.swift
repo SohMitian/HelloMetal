@@ -35,6 +35,12 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         encorder.endEncoding()
+        
+        if let drawable = view.currentDrawable {
+            cmdBuffer.present(drawable)
+        }
+        
+        cmdBuffer.commit()
     }
     
     func setup(device: MTLDevice) {
