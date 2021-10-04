@@ -14,13 +14,14 @@ class Renderer: NSObject, MTKViewDelegate {
     let parent: MetalView
     var commandQueue: MTLCommandQueue?
     var pipelineState: MTLRenderPipelineState?
+    var viewportSize: CGSize = CGSize()
     
     init(_ parent: MetalView){
         self.parent = parent
     }
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        
+        self.viewportSize = size
     }
     
     func draw(in view: MTKView) {
@@ -35,6 +36,8 @@ class Renderer: NSObject, MTKViewDelegate {
         guard let encorder = cmdBuffer.makeRenderCommandEncoder(descriptor: renderPassDesc) else {
             return
         }
+        
+        encorder.setViewport(MTLViewport(originX: 0, originY: 0, width: Double(self.viewportSize.width), height: Double(self.viewportSize.height), znear: 0.0, zfar: 1.0))
         
         encorder.endEncoding()
         
