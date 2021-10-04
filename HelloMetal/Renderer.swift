@@ -7,11 +7,13 @@
 
 import Foundation
 import MetalKit
+import SwiftUI
 
 class Renderer: NSObject, MTKViewDelegate {
     
     let parent: MetalView
     var commandQueue: MTLCommandQueue?
+    var pipelineState: MTLRenderPipelineState?
     
     init(_ parent: MetalView){
         self.parent = parent
@@ -43,7 +45,31 @@ class Renderer: NSObject, MTKViewDelegate {
         cmdBuffer.commit()
     }
     
-    func setup(device: MTLDevice) {
+    func setup(device: MTLDevice, view: MTKView) {
         self.commandQueue = device.makeCommandQueue()
+        setupPipelineState(device: device, view: view)
+    }
+    
+    func setupPipelineState(device: MTLDevice, view: MTKView) {
+        guard let library = device.makeDefaultLibrary() else {
+            return
+        }
+    
+        guard let vertexFunc = library.makeFunction(name: "vertexShader"),
+              let fragmentFunc = library.makeFunction(name: "fragmentShader") else {
+                  return
+              }
+        
+        let pipelineStateDesc = MTLRenderPipelineDescriptor()
+        pipelineStateDesc.label = "Triangle Pipeline"
+        pipelineStateDesc.vertexFunction = vertexFunc
+        pipelineStateDesc.fragmentFunction = fragmentFunc
+        pipelineStateDesc.colorAttachments[0].pixelFormat = view.colorPixelFormat
+        
+        do {
+            self.pipelineState = try device.makeRenderPipelineState(descriptor: pipelineStateDesc)
+        } catch let error {
+            print("error")
+        }
     }
 }
