@@ -16,6 +16,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CFA86844270DE62E00297E4D /* HelloMetal-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HelloMetal-Bridging-Header.h"; sourceTree = "<group>"; };
+		CFA86845270DE9BC00297E4D /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ShaderTypes.h; path = ../ShaderTypes.h; sourceTree = "<group>"; };
 		CFB6567327034B69008F8B2F /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		CFC887E926F8B90E00BAC741 /* HelloMetal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMetal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC887EC26F8B90E00BAC741 /* HelloMetalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloMetalApp.swift; sourceTree = "<group>"; };
@@ -59,6 +61,8 @@
 				CFC887EC26F8B90E00BAC741 /* HelloMetalApp.swift */,
 				CFC887EE26F8B90E00BAC741 /* ContentView.swift */,
 				CFC887FB26F8B9EF00BAC741 /* Renderer.swift */,
+				CFA86845270DE9BC00297E4D /* ShaderTypes.h */,
+				CFA86844270DE62E00297E4D /* HelloMetal-Bridging-Header.h */,
 				CFB6567327034B69008F8B2F /* MetalView.swift */,
 				CFC887F026F8B91000BAC741 /* Assets.xcassets */,
 				CFC887F526F8B91000BAC741 /* Info.plist */,
@@ -287,6 +291,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.HelloMetal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "$(SRCROOT)/HelloMetal/HelloMetal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
