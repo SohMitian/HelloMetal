@@ -15,6 +15,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var commandQueue: MTLCommandQueue?
     var pipelineState: MTLRenderPipelineState?
     var viewportSize: CGSize = CGSize()
+    var vertices: [ShaderVertex] = [ShaderVertex]()
     
     init(_ parent: MetalView){
         self.parent = parent
@@ -22,6 +23,16 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         self.viewportSize = size
+        
+        let wh = Float(min(size.width, size.height))
+        // 頂点の座標
+        self.vertices = [ShaderVertex(position: vector_float2(0.0, wh / 4.0),
+                                      color: vector_float4(1.0, 0.0, 0.0, 1.0)),
+                         ShaderVertex(position: vector_float2(-wh / 4.0, -wh / 4.0),
+                                      color: vector_float4(0.0, 1.0, 0.0, 1.0)),
+                         ShaderVertex(position: vector_float2(wh / 4.0, -wh / 4.0),
+                                      color: vector_float4(0.0, 0.0, 1.0, 1.0)),
+                        ]
     }
     
     func draw(in view: MTKView) {
@@ -39,6 +50,20 @@ class Renderer: NSObject, MTKViewDelegate {
         
         encorder.setViewport(MTLViewport(originX: 0, originY: 0, width: Double(self.viewportSize.width), height: Double(self.viewportSize.height), znear: 0.0, zfar: 1.0))
         
+        if let pipeline = self.pipelineState {
+            // パイプライン状態オブジェクトを設定する
+            encorder.setRenderPipelineState(pipeline)
+            
+            // Vertext関数に渡す引数を設定する
+            encorder.setVertexBytes(self.vertices, length: MemoryLayout<ShaderVertex>.size * self.vertices.count, index: kShaderVertexInputIndexVertices)
+            
+            var vpSize = vector_float2(Float(self.viewportSize.width / 2.0),
+                                       Float(self.viewportSize.height / 2.0))
+            encorder.setVertexBytes(&vpSize, length: MemoryLayout<vector_float2>.size, index: kShaderVertexInputIndexViewportSize)
+            
+            // 三角形を描画する
+            encorder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
+        }
         encorder.endEncoding()
         
         if let drawable = view.currentDrawable {
